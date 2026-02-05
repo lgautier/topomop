@@ -1,0 +1,47 @@
+# Generated from a jinja2 template by topomop.
+
+import dataclasses
+from sqlalchemy import (
+    BigInteger,
+    Column,
+    Date,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    MetaData,
+    String,
+    Table
+)
+
+cdm_version = '{{ cdm_version }}'
+schema_name = '{{ schema_name }}'
+metadata_obj = MetaData(schema=schema_name)
+
+@dataclasses.dataclass
+class Tables:{% for table in tables %}
+    {{ table.varname }}: Table{% endfor %}
+
+
+tables = Tables({% for table in tables %}
+    Table(
+        '{{ table.name.upper() }}',
+        metadata_obj,{% for field in table.fields %}
+	# from CSV row {{ field.row_i }}.
+        Column(
+	    '{{ field.name.upper() }}',
+            {{ field.alchemytype }}{% if field.foreignkey(schema_name, name2schema) %},
+	    ForeignKey('{{ field.foreignkey(schema_name, name2schema) }}'){% endif %}{% if field.is_primarykey %},
+	    primary_key=True{% endif %}{% if field.is_required %},
+	    nullable=True{% else %}{% endif %}
+        ),{% endfor %}
+	comment=(
+	    """Description:
+	    {{ table.cdm.tableDescription }}
+	    {% if table.cdm.userGuidance %}
+	    User guidance:
+	    {{ table.cdm.userGuidance }}{% endif %}
+	    """
+	)
+    ){% if not loop.last %}, {% endif %}{% endfor %}
+)
