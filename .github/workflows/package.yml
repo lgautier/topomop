@@ -22,6 +22,7 @@ jobs:
     - name: Check type hints
       run: |
         source topomop-env/bin/activate
+	uv pip install '.[sqlalchemy]'
         uv pip install ty
         ty check src/
   build-sdist:
