@@ -1,5 +1,4 @@
 import attrs
-import dataclasses
 from topomop.cdm_csv import (
     _bool,
     _cdmdatatype,
