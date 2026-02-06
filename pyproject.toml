@@ -1,0 +1,34 @@
+[build-system]
+requires = ["uv_build >= 0.9.26, <0.10.0"]
+build-backend = "uv_build"
+
+[project]
+name = "topomop"
+description = "Data (engineering) tooling for the OMOP Common Data Model."
+version = "2026.2.2dev"
+requires-python = ">= 3.12"
+authors = [
+  {name = "Laurent Gautier"}
+]
+readme = "README.md"
+license = "Apache-2.0"
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Build Tools",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+dependencies = ["attrs"]
+
+[project.optional-dependencies]
+sqlalchemy = [
+  "jinja2", "sqlalchemy"
+]
+tests = [
+  "pytest",
+   "jinja2", "sqlalchemy"
+]
+
+[project.scripts]
+topomop-convert = "topomop.convert:main"
