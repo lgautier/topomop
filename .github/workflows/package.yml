@@ -23,7 +23,7 @@ jobs:
       run: |
         source topomop-env/bin/activate
         uv pip install ty
-        ty src/
+        ty check src/
   build-sdist:
     runs-on: ubuntu-latest
     steps:
