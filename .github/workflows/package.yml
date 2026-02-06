@@ -15,10 +15,13 @@ jobs:
       uses: astral-sh/setup-uv@v6
     - name: Lint
       run: |
+        uv venv --no-project --no-config --no-managed-python topomop-env
+        source topomop-env/bin/activate
         uv pip install ruff
         ruff check src/
     - name: Check type hints
       run: |
+        source topomop-env/bin/activate
         uv pip install ty
         ty src/
   build-sdist:
@@ -33,9 +36,12 @@ jobs:
       uses: astral-sh/setup-uv@v6
     - name: Install dependencies
       run: |
+        uv venv --no-project --no-config --no-managed-python topomop-env
+        source topomop-env/bin/activate
         uv pip install setuptools build
     - name: Build sdist rinterface
       run: |
+        source topomop-env/bin/activate
         python -m build -o dist/ --sdist .
     - name: Upload sdist rinterface
       uses: actions/upload-artifact@v4
@@ -58,9 +64,12 @@ jobs:
       uses: astral-sh/setup-uv@v6
     - name: Install dependencies
       run: |
+        uv venv --no-project --no-config --no-managed-python topomop-env
+        source topomop-env/bin/activate
         uv pip install setuptools build
     - name: Build wheel
       run: |
+        source topomop-env/bin/activate
         python -m build -o dist/ --wheel .
     - uses: actions/upload-artifact@v4
       with:
@@ -83,7 +92,10 @@ jobs:
       uses: astral-sh/setup-uv@v6
     - name: Install dependencies
       run: |
+        uv venv --no-project --no-config --no-managed-python topomop-env
+        source topomop-env/bin/activate
         uv pip install '.[tests]'
     - name: Build wheel
       run: |
+        source topomop-env/bin/activate
         pytest tests/
