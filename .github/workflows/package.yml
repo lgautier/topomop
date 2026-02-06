@@ -16,7 +16,7 @@ jobs:
     - name: Lint
       run: |
         uv pip install ruff
-	ruff check src/
+        ruff check src/
     - name: Check type hints
       run: |
         uv pip install ty
@@ -67,7 +67,8 @@ jobs:
         name: topomop-py${{ matrix.python-version }}
         path: dist/topomop-*.whl
   test:
-    needs: [build-api-wheel, build-noabi-wheel]
+    needs: [build-sdist, build-wheel]
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
