@@ -289,7 +289,8 @@ class Cdm:
         dict[str, str],
         dict[
             str,
-            dict[str, tuple[TableAbstract, tuple[FieldAbstract, ...]]]
+            dict[str, tuple[DataFromRow[TableAbstract],
+                            tuple[DataFromRow[FieldAbstract], ...]]]
         ]
     ]:
         all_fields = list(DataFromRow(*_) for _ in enumerate(self.iter_fields()))

@@ -61,6 +61,7 @@ def main():
         )
         sys.exit(1)
 
+    name2schema, schema_defs = cdm.schemas()
     for schema_name, tables in schema_defs.items():
         source_code = topomop.translate.render_sqlalchemy(
             args.cdm_version,
