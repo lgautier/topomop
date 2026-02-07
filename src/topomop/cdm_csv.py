@@ -53,6 +53,15 @@ def _bool(obj: str|bool):
         res = True
     elif obj == 'No':
         res = False
+    elif obj in ('', 'NA'):
+        # TODO: OMOP CDM's definition appear inconsistent.
+        # Until this fixed (see
+        # https://github.com/OHDSI/CommonDataModel/pull/769),
+        # we assume that "" and "NA" mean "No" -> False.
+        warnings.warn(
+            f'Expected "Yes" or "No" and got {repr(obj)}. Assuming it means "No".'
+        )
+        res = False
     else:
         raise ValueError(
             'Acceptable values are a string that is '
