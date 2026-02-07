@@ -3,11 +3,21 @@ import pytest
 
 import topomop.cdm_csv
 
-CSVS_PATH = 'tmp/CommonDataModel/inst/csv'
+OMOP_CDM_CSV_DIR = os.environ.get('OMOP_CDM_CSV_DIR')
+if not (
+        OMOP_CDM_CSV_DIR
+        and os.path.exists(OMOP_CDM_CSV_DIR)
+        and os.path.isdir(OMOP_CDM_CSV_DIR)
+):
+    raise ValueError(
+        'The environment variable OMOP_CDM_CSV_DIR must be the path '
+        'to a directory where CSV files with OMOP CDM definitions '
+        f'are located, not: {repr(OMOP_CDM_CSV_DIR)}.'
+    )
 
 
 def test_scan():
-    definitions = topomop.cdm_csv.scan(CSVS_PATH)
+    definitions = topomop.cdm_csv.scan(OMOP_CDM_CSV_DIR)
     assert (
         set(topomop.cdm_csv.SUPPORTED_VERSIONS.keys())
         .issubset(set(definitions.keys()))
@@ -23,8 +33,8 @@ def test_scan():
 class TestCdm:
 
     def test_cdm(self, cdm_modulename):
-        cdm = topomop.cdm_csv.Cdm(CSVS_PATH, f'topomop.{cdm_modulename}')
+        cdm = topomop.cdm_csv.Cdm(OMOP_CDM_CSV_DIR, f'topomop.{cdm_modulename}')
 
     def test_iter_by_schema(self, cdm_modulename):
-        cdm = topomop.cdm_csv.Cdm(CSVS_PATH, f'topomop.{cdm_modulename}')
+        cdm = topomop.cdm_csv.Cdm(OMOP_CDM_CSV_DIR, f'topomop.{cdm_modulename}')
         tuple(cdm.schemas())

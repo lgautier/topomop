@@ -84,7 +84,13 @@ jobs:
       matrix:
         python-version: ["3.12", "3.13"]
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout topomop repository.
+      uses: actions/checkout@v4
+    - name: Clone OHDSI's CommonDataModel repository.
+      uses: actions/checkout@v4
+      with:
+        repository: 'OHDSI/CommonDataModel'
+        path: '.'
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
@@ -96,7 +102,7 @@ jobs:
         uv venv --no-project --no-config --no-managed-python topomop-env
         source topomop-env/bin/activate
         uv pip install '.[tests]'
-    - name: Build wheel
+    - name: Run tests
       run: |
         source topomop-env/bin/activate
-        pytest tests/
+        OMOP_CDM_CSV_DIR=CommonDataModel/inst/csv pytest tests/

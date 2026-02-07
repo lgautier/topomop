@@ -1,11 +1,22 @@
 import jinja2
+import os
 import pytest
 import textwrap
 
 import topomop.cdm_csv
 import topomop.translate
 
-CSVS_PATH = 'tmp/CommonDataModel/inst/csv'
+OMOP_CDM_CSV_DIR = os.environ.get('OMOP_CDM_CSV_DIR')
+if not (
+        OMOP_CDM_CSV_DIR
+        and os.path.exists(OMOP_CDM_CSV_DIR)
+        and os.path.isdir(OMOP_CDM_CSV_DIR)
+):
+    raise ValueError(
+        'The environment variable OMOP_CDM_CSV_DIR must be the path '
+        'to a directory where CSV files with OMOP CDM definitions '
+        f'are located, not: {repr(OMOP_CDM_CSV_DIR)}.'
+    )
 
 
 @pytest.mark.parametrize(
@@ -13,7 +24,7 @@ CSVS_PATH = 'tmp/CommonDataModel/inst/csv'
     topomop.cdm_csv.SUPPORTED_VERSIONS.items()
 )
 def test_translation_alchemy_importable(cdm_version, cdm_modulename):
-    cdm = topomop.cdm_csv.Cdm(CSVS_PATH, f'topomop.{cdm_modulename}')
+    cdm = topomop.cdm_csv.Cdm(OMOP_CDM_CSV_DIR, f'topomop.{cdm_modulename}')
     name2schema, schema_defs = cdm.schemas()
     for schema_name, tables in schema_defs.items():
         source_code = topomop.translate.render_sqlalchemy(
@@ -31,7 +42,7 @@ def test_translation_alchemy_importable(cdm_version, cdm_modulename):
     topomop.cdm_csv.SUPPORTED_VERSIONS.items()
 )
 def test_translation_sql(cdm_version, cdm_modulename):
-    cdm = topomop.cdm_csv.Cdm(CSVS_PATH, f'topomop.{cdm_modulename}')
+    cdm = topomop.cdm_csv.Cdm(OMOP_CDM_CSV_DIR, f'topomop.{cdm_modulename}')
     name2schema, schema_defs = cdm.schemas()
 
     context = {}
