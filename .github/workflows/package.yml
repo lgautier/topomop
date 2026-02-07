@@ -94,8 +94,8 @@ jobs:
     - name: Check content.
       run: |
            ls -l
-	   echo "external-repo-directory:"
-	   ls -l external-repo-directory
+           echo "external-repo-directory:"
+           ls -l external-repo-directory
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
