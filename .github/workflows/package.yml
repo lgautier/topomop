@@ -91,11 +91,6 @@ jobs:
       with:
         repository: 'OHDSI/CommonDataModel'
         path: 'external-repo-directory'
-    - name: Check content.
-      run: |
-           ls -l
-           echo "external-repo-directory:"
-           ls -l external-repo-directory
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
@@ -110,4 +105,4 @@ jobs:
     - name: Run tests
       run: |
         source topomop-env/bin/activate
-        OMOP_CDM_CSV_DIR=CommonDataModel/inst/csv pytest tests/
+        OMOP_CDM_CSV_DIR=external-repo-directory/inst/csv pytest tests/
