@@ -108,6 +108,11 @@ class TableAlchemyAdapter:
     def name(self) -> str:
         return self.cdm.cdmTableName
 
+
+def escape_tripleq(obj: str):
+    return obj.replace('"""', r'\"""')
+
+
 _STYLE_TEMPLATE =  {
     'declarative': 'sqlalchemy_declarative.py.jinja2',
     'imperative': 'sqlalchemy_imperative.py.jinja2'
@@ -147,6 +152,8 @@ def render_sqlalchemy(
         loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
         undefined=jinja2.StrictUndefined
     )
+    env.filters['repr'] = repr
+    env.filters['escape_tripleq'] = escape_tripleq
     template = env.get_template(_STYLE_TEMPLATE[style])
 
     return template.render(data)

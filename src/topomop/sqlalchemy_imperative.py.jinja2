@@ -23,27 +23,44 @@ class Tables:{% for table in tables %}
     {{ table.varname }}: Table{% endfor %}
 
 
-tables = Tables({% for table in tables %}{% if comment_origin %}
-    # From Table CSV row {{ table.row_i }}.{% endif %}
+tables = Tables(
+{%- for table in tables -%}
+    {% if comment_origin %}
+    # From Table CSV row {{ table.row_i  }}.{% endif %}
     Table(
-        '{{ table.name.upper() }}',
-        metadata_obj,{% for field in table.fields %}{% if comment_origin %}
+        {{ table.name.upper() | repr }},
+        metadata_obj,
+        {% for field in table.fields %}
+            {%- if comment_origin -%}
         # From Field CSV row {{ field.row_i }}.{% endif %}
         Column(
             '{{ field.name.upper() }}',
-            {{ field.alchemytype }}{% if field.foreignkey(schema_name, name2schema) %},
-	    ForeignKey('{{ field.foreignkey(schema_name, name2schema) }}'){% endif %}{% if field.is_primarykey %},
-	    primary_key=True{% endif %}{% if field.is_required %},
-	    nullable=True{% else %}{% endif %}{% if field.cdm.userGuidance %},
-            comment=r"""{{ field.cdm.userGuidance | e }}"""{% endif %}
-        ),{% endfor %}
+            {{ field.alchemytype }}
+            {%- if field.foreignkey(schema_name, name2schema) -%},
+            ForeignKey('{{ field.foreignkey(schema_name, name2schema) }}')
+            {%- endif -%}
+            {%- if field.is_primarykey -%},
+            primary_key=True
+            {%- endif -%}
+            {%- if field.is_required -%},
+            nullable=True
+            {%- endif -%}
+            {%- if field.cdm.userGuidance -%},
+            comment="""{{ field.cdm.userGuidance | escape_tripleq }} """{%  endif %}
+        ),
+	{% endfor %}
         comment=(
-            r"""Description:
-            {{ table.cdm.tableDescription }}
-            {% if table.cdm.userGuidance %}
+            """Description:
+            {{ table.cdm.tableDescription | escape_tripleq }}
+            {%- if table.cdm.userGuidance -%}
             User guidance:
-            {{ table.cdm.userGuidance }}{% endif %}
-            """
+
+            {{ table.cdm.userGuidance | escape_tripleq }}
+            {%- endif -%}
+	     """
         )
-    ){% if not loop.last %}, {% endif %}{% endfor %}
+    )
+      {%- if not loop.last -%},
+      {%- endif -%}
+  {% endfor %}
 )
