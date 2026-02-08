@@ -27,6 +27,21 @@ def build_parser():
             will be saved)."""
         )
     )
+    parser.add_argument(
+        '-f', '--force',
+        action='store_true',
+        help=textwrap.dedent(
+            "Force overwriting existing files."
+        )
+    )
+    parser.add_argument(
+        '--style',
+        choices=('declarative', 'imperative'),
+        default='imperative',
+        help=textwrap.dedent(
+            """SQLAlchemy style for class mapping (default: %default)."""
+        )
+    )
 
     return parser
 
@@ -55,11 +70,17 @@ def main():
             output_already_exist.append(output_file_path)
 
     if output_already_exist:
-        print(
-            f'Error: Output files already exist in {args.destination}: '
-            f'{repr(output_already_exist)}.'
-        )
-        sys.exit(1)
+        if args.force:
+            print(
+                f'Warning: Output files overwritten in {args.destination}: '
+                f'{repr(output_already_exist)}.'
+            )
+        else:
+            print(
+                f'Error: Output files already exist in {args.destination}: '
+                f'{repr(output_already_exist)}.'
+            )
+            sys.exit(1)
 
     name2schema, schema_defs = cdm.schemas()
     for schema_name, tables in schema_defs.items():
@@ -67,7 +88,8 @@ def main():
             args.cdm_version,
             schema_name,
             name2schema,
-            tables
+            tables,
+            style=args.style
         )
         output_file_path = os.path.join(
             args.destination,
