@@ -23,25 +23,26 @@ class Tables:{% for table in tables %}
     {{ table.varname }}: Table{% endfor %}
 
 
-tables = Tables({% for table in tables %}
+tables = Tables({% for table in tables %}{% if comment_origin %}
+    # From Table CSV row {{ table.row_i }}.{% endif %}
     Table(
         '{{ table.name.upper() }}',
-        metadata_obj,{% for field in table.fields %}
-	# from CSV row {{ field.row_i }}.
+        metadata_obj,{% for field in table.fields %}{% if comment_origin %}
+        # From Field CSV row {{ field.row_i }}.{% endif %}
         Column(
-	    '{{ field.name.upper() }}',
+            '{{ field.name.upper() }}',
             {{ field.alchemytype }}{% if field.foreignkey(schema_name, name2schema) %},
-	    ForeignKey('{{ field.foreignkey(schema_name, name2schema) }}'){% endif %}{% if field.is_primarykey %},
-	    primary_key=True{% endif %}{% if field.is_required %},
-	    nullable=True{% else %}{% endif %}
+            ForeignKey('{{ field.foreignkey(schema_name, name2schema) }}'){% endif %}{% if field.is_primarykey %},
+            primary_key=True{% endif %}{% if field.is_required %},
+            nullable=True{% else %}{% endif %}
         ),{% endfor %}
-	comment=(
-	    """Description:
-	    {{ table.cdm.tableDescription }}
-	    {% if table.cdm.userGuidance %}
-	    User guidance:
-	    {{ table.cdm.userGuidance }}{% endif %}
-	    """
-	)
+        comment=(
+            """Description:
+            {{ table.cdm.tableDescription }}
+            {% if table.cdm.userGuidance %}
+            User guidance:
+            {{ table.cdm.userGuidance }}{% endif %}
+            """
+        )
     ){% if not loop.last %}, {% endif %}{% endfor %}
 )

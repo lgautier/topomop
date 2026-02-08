@@ -42,6 +42,14 @@ def build_parser():
             """SQLAlchemy style for class mapping (default: %default)."""
         )
     )
+    parser.add_argument(
+        '--no-comment-origin',
+        action='store_true',
+        help=textwrap.dedent(
+            """Do not add the origin of the data definition as a comment."""
+        )
+    )
+
 
     return parser
 
@@ -89,7 +97,8 @@ def main():
             schema_name,
             name2schema,
             tables,
-            style=args.style
+            style=args.style,
+            comment_origin=not args.no_comment_origin
         )
         output_file_path = os.path.join(
             args.destination,
