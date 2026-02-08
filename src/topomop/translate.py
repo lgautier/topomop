@@ -108,6 +108,10 @@ class TableAlchemyAdapter:
     def name(self) -> str:
         return self.cdm.cdmTableName
 
+_STYLE_TEMPLATE =  {
+    'declarative': 'sqlalchemy_declarative.py.jinja2',
+    'imperative': 'sqlalchemy_imperative.py.jinja2'
+}
 
 def render_sqlalchemy(
         cdm_version: str,
@@ -116,7 +120,8 @@ def render_sqlalchemy(
         tables: dict[
             str, tuple[cdm_csv.DataFromRow[cdm_csv.TableAbstract],
                        tuple[cdm_csv.DataFromRow[cdm_csv.FieldAbstract], ...]]
-        ]
+        ],
+        style: str = "imperative"
 ):
     tables_prepared = []
     for tbl, fields in tables.values():
@@ -140,6 +145,6 @@ def render_sqlalchemy(
         loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
         undefined=jinja2.StrictUndefined
     )
-    template = env.get_template('sqlalchemy.py.jinja2')
+    template = env.get_template(_STYLE_TEMPLATE[style])
 
     return template.render(data)

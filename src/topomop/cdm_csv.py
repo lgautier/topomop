@@ -42,9 +42,11 @@ SUPPORTED_VERSIONS = {
     'v5.3': 'cdmv5_3',
     'v5.4': 'cdmv5_4',
     'v6.0': 'cdmv6_0',
-    '_Oncology_Ex': 'cdm_Oncology_Ex'
 }
 
+SUPPORTED_EXTENSIONS = {
+    '_Oncology_Ex': 'cdm_Oncology_Ex'
+}
 
 def _bool(obj: str|bool):
     if isinstance(obj, bool):

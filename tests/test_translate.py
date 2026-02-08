@@ -29,11 +29,6 @@ def test_translation_alchemy_importable(cdm_version, cdm_modulename):
                 'Field definition in CDM v5.4 has an invalid row index 353. '
                 'See https://github.com/OHDSI/CommonDataModel/pull/766.'
             )
-    elif cdm_modulename == 'cdm_Oncology_Ex':
-            pytest.xfail(
-                'Field definition in CDM Oncology_Ex reference a table that '
-                'is never defined.'
-            )
 
     cdm = topomop.cdm_csv.Cdm(OMOP_CDM_CSV_DIR, f'topomop.{cdm_modulename}')
     name2schema, schema_defs = cdm.schemas()
@@ -57,11 +52,6 @@ def test_translation_sql(cdm_version, cdm_modulename):
             pytest.xfail(
                 'Field definition in CDM v5.4 has an invalid row index 353. '
                 'See https://github.com/OHDSI/CommonDataModel/pull/766.'
-            )
-    elif cdm_modulename == 'cdm_Oncology_Ex':
-            pytest.xfail(
-                'Field definition in CDM Oncology_Ex reference a table that '
-                'is never defined.'
             )
 
     cdm = topomop.cdm_csv.Cdm(OMOP_CDM_CSV_DIR, f'topomop.{cdm_modulename}')
