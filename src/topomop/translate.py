@@ -121,6 +121,7 @@ def render_sqlalchemy(
             str, tuple[cdm_csv.DataFromRow[cdm_csv.TableAbstract],
                        tuple[cdm_csv.DataFromRow[cdm_csv.FieldAbstract], ...]]
         ],
+        comment_origin: bool = True,
         style: str = "imperative"
 ):
     tables_prepared = []
@@ -137,7 +138,8 @@ def render_sqlalchemy(
         'cdm_version': cdm_version,
         'schema_name': schema_name,
         'name2schema': name2schema,
-        'tables': tables_prepared
+        'tables': tables_prepared,
+        'comment_origin': comment_origin
     }
 
     # TODO: template current in the same directory as the modules.
