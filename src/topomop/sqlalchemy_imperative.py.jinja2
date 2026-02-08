@@ -35,14 +35,14 @@ tables = Tables({% for table in tables %}{% if comment_origin %}
 	    ForeignKey('{{ field.foreignkey(schema_name, name2schema) }}'){% endif %}{% if field.is_primarykey %},
 	    primary_key=True{% endif %}{% if field.is_required %},
 	    nullable=True{% else %}{% endif %}{% if field.cdm.userGuidance %},
-            comment="""{{ field.cdm.userGuidance | e }}"""{% endif %}
+            comment=r"""{{ field.cdm.userGuidance | e }}"""{% endif %}
         ),{% endfor %}
         comment=(
-            """Description:
-            {{ table.cdm.tableDescription | e }}
+            r"""Description:
+            {{ table.cdm.tableDescription }}
             {% if table.cdm.userGuidance %}
             User guidance:
-            {{ table.cdm.userGuidance | e }}{% endif %}
+            {{ table.cdm.userGuidance }}{% endif %}
             """
         )
     ){% if not loop.last %}, {% endif %}{% endfor %}
