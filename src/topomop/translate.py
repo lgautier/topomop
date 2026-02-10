@@ -81,17 +81,20 @@ class TableAlchemyAdapter:
     cdm: cdm_csv.TableAbstract
     _varname: str | None
     _fields: typing.Sequence[FieldAlchemyAdapter]
+    _patch_composite_primary_keys: tuple[str, ...] | None
 
     def __init__(
             self,
             obj: cdm_csv.DataFromRow[cdm_csv.TableAbstract],
             fields: typing.Sequence[FieldAlchemyAdapter],
-            varname: str | None = None
+            varname: str | None = None,
+            _patch_composite_primary_keys: tuple[str, ...] | None = None
     ):
         self.row_i = obj.row_i
         self.cdm = obj.data
         self._varname = varname
         self._fields = fields
+        self._patch_composite_primary_keys = _patch_composite_primary_keys
 
     @property
     def fields(self):
@@ -127,18 +130,47 @@ def render_sqlalchemy(
                        tuple[cdm_csv.DataFromRow[cdm_csv.FieldAbstract], ...]]
         ],
         comment_origin: bool = True,
-        style: str = "imperative"
+        style: str = "imperative",
+        _patch_composite_primary_keys: dict[str, # table name.
+                                            tuple[str, ...]] = {},
+        _patch_override_attributes: dict[str, # table name.
+                                         dict[str, # field name.
+                                              tuple[str,  # CDM attribute name.
+                                                    object]
+                                              ]
+                                         ] = {}
 ):
     tables_prepared = []
     for tbl, fields in tables.values():
         fields_prepared = []
+        _patch_attrs = _patch_override_attributes.get(tbl.data.name.upper())
+        _patch_prim_keys = _patch_composite_primary_keys.get(tbl.data.cdmTableName.upper())
+        if _patch_prim_keys:
+            warnings.warn(
+                f'{tbl.data.name.upper()}: '
+                f'setting a composite primary key with {repr(_patch_prim_keys)}'
+            )
         for fld in fields:
-            fields_prepared.append(FieldAlchemyAdapter(fld))
+            if _patch_prim_keys and (fld.data.name.upper() in _patch_prim_keys):
+                setattr(fld.data, 'isPrimaryKey', True)
+            if _patch_attrs and _patch_attrs.get(fld.data.name.upper()):
+                for key, value in _patch_attrs.get(fld.data.name.upper(), {}):
+                    setattr(fld.data, key, value)
+                    warnings.warn(
+                        f'{tbl.data.name.upper()}.{fld.data.name.upper()}: '
+                        f'field {key} in OMOP CDM changed from {repr(getattr(fld.data, key))} to {repr(value)}'
+                    )
+            fields_prepared.append(
+                FieldAlchemyAdapter(fld)
+            )
 
         tables_prepared.append(
-            TableAlchemyAdapter(tbl, fields_prepared)
+            TableAlchemyAdapter(
+                tbl,
+                fields_prepared,
+                _patch_composite_primary_keys = _patch_prim_keys
+            )
         )
-
     data = {
         'cdm_version': cdm_version,
         'schema_name': schema_name,

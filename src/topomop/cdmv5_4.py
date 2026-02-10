@@ -46,3 +46,76 @@ class Table(TableAbstract):
     tableDescription: str
     userGuidance: str | None = attrs.field(converter=_str_optional)
     etlConventions: str | None = attrs.field(converter=_str_optional)
+
+
+_PATCH_ROW = {
+    'fields': {
+        204: (
+            ('note_nlp', '"offset"'),
+            'note_nlp,offset,No,varchar(50),Character offset of the extracted term in the input note,NA,No,No,NA,NA,NA,NA,NA',
+            'See https://github.com/OHDSI/CommonDataModel/pull/773'
+        ),
+        353: (
+            ('cdm_source', 'source_documentation_reference'),
+            'cdm_source,source_documentation_reference,No,varchar(255),"Refers to a publication or web resource describing the source data, e.g. a data dictionary.",NA,No,No,NA,NA,NA,NA,NA',
+            'See https://github.com/OHDSI/CommonDataModel/pull/766'
+        )
+    },
+    'tables': {
+    }
+}
+
+_PATCH_COMPOSITE_PRIMARY_KEYS = {
+    'VOCAB': {
+        'CONCEPT_RELATIONSHIP': (
+            'CONCEPT_ID_1', 'CONCEPT_ID_2', 'RELATIONSHIP_ID', 'VALID_START_DATE', 'VALID_END_DATE'
+        ),
+        'CONCEPT_SYNONYM': (
+            'CONCEPT_ID', 'CONCEPT_SYNONYM_NAME', 'LANGUAGE_CONCEPT_ID'
+        ),
+        'CONCEPT_ANCESTOR': (
+            'ANCESTOR_CONCEPT_ID', 'DESCENDANT_CONCEPT_ID'
+        ),
+        'SOURCE_TO_CONCEPT_MAP': (
+                'SOURCE_CONCEPT_ID', 'SOURCE_VOCABULARY_ID',
+                'TARGET_CONCEPT_ID', 'TARGET_VOCABULARY_ID',
+                'VALID_START_DATE', 'VALID_END_DATE', 'INVALID_REASON'
+        ),
+        'DRUG_STRENGTH': tuple()
+    },
+    'CDM': {
+        'FACT_RELATIONSHIP': (
+            'DOMAIN_CONCEPT_ID_1', 'FACT_ID_1',
+            'DOMAIN_CONCEPT_ID_2', 'FACT_ID_2',
+            'RELATIONSHIP_CONCEPT_ID'
+        ),
+        'EPISODE_EVENT': (
+            'EPISODE_ID', 'EVENT_ID', 'EPISODE_EVENT_FIELD_CONCEPT_ID'
+        ),
+        'METADATA': tuple(),
+        'CDM_SOURCE': (
+            'CDM_SOURCE_NAME',
+            'CDM_SOURCE_ABBREVIATION',
+            'CDM_HOLDER',
+            'CDM_VERSION'
+        )
+    },
+    'RESULTS': {
+        'COHORT': (
+            'COHORT_DEFINITION_ID', 'SUBJECT_ID'
+        )
+    }
+}
+
+_PATCH_OVERRIDE_ATTRIBUTES = {
+    'CDM': {
+        'DEATH': {
+            'PERSON_ID': (('isPrimaryKey', True), )
+        }
+    },
+    'RESULTS': {
+        'COHORT_DEFINITION': {
+            'COHORT_DEFINITION_ID': (('isPrimaryKey', True), )
+        }
+    }
+}

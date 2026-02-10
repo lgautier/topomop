@@ -1,0 +1,74 @@
+# Generated from a jinja2 template by topomop.
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    Mapped,
+    mapped_column
+)
+
+from sqlalchemy import (
+    BigInteger,
+    Column,
+    Date,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    MetaData,
+    String,
+    Table
+)
+
+cdm_version = '{{ cdm_version }}'
+schema_name = '{{ schema_name }}'
+metadata_obj = MetaData(schema=schema_name)
+
+
+class Base(DeclarativeBase):
+    metadata = metadata_obj
+
+# TODO: check that no table.name can be equal to "Base".
+{% for table in tables %}
+{%- if comment_origin -%}
+
+# From Table CSV row {{ table.row_i }}.{% endif %}
+class {{ table.name }}(Base):
+    """Description:
+    {{ table.cdm.tableDescription | escape_tripleq }}
+    {%- if table.cdm.userGuidance -%}
+
+    User guidance:
+     
+    {{ table.cdm.userGuidance | escape_tripleq }}{% endif %}
+     """
+
+    __tablename__ = {{ table.name.upper() | repr }}
+    {% if table._patch_composite_primary_keys is not none %}
+        {%- if table._patch_composite_primary_keys | length == 0 -%}
+    {{ table.name.upper() }}_ID = mapped_column(
+        Integer, primary_key=True, autoincrement=True
+    )
+	{%- else -%}
+    __mapper_args__ = {
+        'primary_key': {{ table._patch_composite_primary_keys | repr }}
+    }{%- endif -%}
+    {% endif %}
+    {% for field in table.fields %}
+    {%- if comment_origin %}# From Field CSV row {{ field.row_i }}.{% endif %}
+    {{ field.name.upper() }} = mapped_column(
+        {{ field.alchemytype }}
+        {%- if field.foreignkey(schema_name, name2schema) -%},
+        ForeignKey({{ field.foreignkey(schema_name, name2schema)  | repr }})
+        {%- endif -%}
+        {%- if field.is_primarykey -%},
+        primary_key=True
+        {%- endif -%}
+        {%- if not field.is_required -%},
+        nullable=True
+        {%- else -%}
+        {%- endif -%}
+        {%- if field.cdm.userGuidance -%},
+        comment="""{{ field.cdm.userGuidance | escape_tripleq }} """{% endif %}
+    )
+    {% endfor %}
+
+{% endfor %}

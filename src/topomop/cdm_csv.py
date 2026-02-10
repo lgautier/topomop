@@ -31,6 +31,7 @@ import re
 import typing
 import types
 import warnings
+import io
 
 # Filenames 
 OMOP_FILENAME_PATTERN = re.compile(
@@ -51,7 +52,7 @@ SUPPORTED_EXTENSIONS = {
 def _bool(obj: str|bool):
     if isinstance(obj, bool):
         res = obj
-    if obj == 'Yes':
+    elif obj == 'Yes':
         res = True
     elif obj == 'No':
         res = False
@@ -157,9 +158,17 @@ class FieldAbstract(abc.ABC):
         else:
             return None
 
+    @property
+    def name(self):
+        return self.cdmFieldName
+
 
 class TableAbstract(abc.ABC):
     cdmTableName: str
+
+    @property
+    def name(self):
+        return self.cdmTableName
 
     
 def match_omop_csv(fn: str):
@@ -186,7 +195,7 @@ def scan(path):
     return res
 
 
-def _read_csv(path, cls):
+def _read_csv(path, cls, _patch_row={}):
     with open(path, newline='') as fh:
         reader = csv.reader(fh)
         header = next(reader)
@@ -220,6 +229,28 @@ def _read_csv(path, cls):
                 raise ValueError(
                     f'Empty row(s) in the middle of the file (around row index {row_i}).'
                 )
+            if row_i in _patch_row:
+                check_tuple, patched_str, issue = _patch_row[row_i]
+
+                # TODO: Allow to skip the row patch if mismatch?
+                if len(row) < len(check_tuple):
+                    raise ValueError(
+                        f'Row {row_i} has only {len(row)} elements (and check tuple needs {len(check_tuple)}).'
+                    )
+                elif check_tuple != tuple(row[:len(check_tuple)]):
+                    raise ValueError(
+                        f'Check tuple expected {repr(check_tuple)} '
+                        f'but got {repr(tuple(row[:len(check_tuple)]))}).'
+                    )
+
+                in_memory_file = io.StringIO(patched_str)
+                singlerow_reader = csv.reader(in_memory_file)
+                row = next(singlerow_reader)
+
+                warnings.warn(
+                    f'{row_i} was patched to address and issue (see {issue}).'
+                )
+
             try:
                 yield cls(*row)
             except (TypeError, ValueError) as err:
@@ -273,7 +304,8 @@ class Cdm:
                 self.csvdir_path,
                 self.cdm_module.INFO.csvpath_table
             ),
-            self.cdm_module.Table
+            self.cdm_module.Table,
+            self.cdm_module._PATCH_ROW['tables']
         )
 
     def iter_fields(self) -> typing.Iterator[tuple[str, FieldAbstract]]:
@@ -282,7 +314,8 @@ class Cdm:
                 self.csvdir_path,
                 self.cdm_module.INFO.csvpath_field
             ),
-            self.cdm_module.Field
+            self.cdm_module.Field,
+            self.cdm_module._PATCH_ROW['fields']
         )
 
     def schemas(
@@ -293,7 +326,11 @@ class Cdm:
             str,
             dict[str, tuple[DataFromRow[TableAbstract],
                             tuple[DataFromRow[FieldAbstract], ...]]]
-        ]
+        ],
+        # _PATCH_COMPOSITE_PRIMARY_KEY
+        dict[dict, tuple[str, ...]],
+        # _PATCH_OVERRIDE_ATTRIBUTES
+        dict[dict, dict[str, tuple[str, object]]],
     ]:
         all_fields = list(DataFromRow(*_) for _ in enumerate(self.iter_fields()))
         all_fields.sort(key=lambda x: x.data.cdmTableName)
@@ -340,4 +377,6 @@ class Cdm:
                 name2schema[tablename]
             ][tablename] = tuple(table_tuple)
             
-        return (name2schema, schemas)
+        return (name2schema, schemas,
+                self.cdm_module._PATCH_COMPOSITE_PRIMARY_KEYS,
+                self.cdm_module._PATCH_OVERRIDE_ATTRIBUTES)
