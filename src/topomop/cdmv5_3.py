@@ -1,5 +1,4 @@
 import attrs
-import re
 from topomop.cdm_csv import (
     _bool,
     _cdmdatatype,
