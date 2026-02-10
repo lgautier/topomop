@@ -26,10 +26,23 @@ class Tables:{% for table in tables %}
 tables = Tables(
 {%- for table in tables -%}
     {% if comment_origin %}
-    # From Table CSV row {{ table.row_i  }}.{% endif %}
+    # From Table CSV row {{ table.row_i  }}.
+    {%- endif %}
     Table(
         {{ table.name.upper() | repr }},
         metadata_obj,
+        {% if table._patch_composite_primary_keys is not none %}
+            {%- if table._patch_composite_primary_keys | length == 0 -%}
+        Column(
+            '{{ table.name.upper() }}_ID',
+            Integer, primary_key=True, autoincrement=True,
+            comment="""TODO: add reference to issue."""
+        ),
+            {%- else -%}
+        # Composite primary key added as a fix (columns with `primary_key=True`):
+        # {{ table._patch_composite_primary_keys | repr }}.
+            {%-  endif -%}
+        {%- endif %}
         {% for field in table.fields %}
             {%- if comment_origin -%}
         # From Field CSV row {{ field.row_i }}.{% endif %}

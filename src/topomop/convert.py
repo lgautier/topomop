@@ -63,7 +63,8 @@ def main():
     cdm = topomop.cdm_csv.Cdm(args.source, f'topomop.{cdm_modulename}')
 
     try:
-        name2schema, schema_defs = cdm.schemas()
+        (name2schema, schema_defs,
+         _patch_composite_primary_keys, _patch_override_attributes) = cdm.schemas()
     except FileNotFoundError as err:
         print(err)
         sys.exit(1)
@@ -90,7 +91,6 @@ def main():
             )
             sys.exit(1)
 
-    name2schema, schema_defs = cdm.schemas()
     for schema_name, tables in schema_defs.items():
         source_code = topomop.translate.render_sqlalchemy(
             args.cdm_version,
@@ -98,7 +98,9 @@ def main():
             name2schema,
             tables,
             style=args.style,
-            comment_origin=not args.no_comment_origin
+            comment_origin=not args.no_comment_origin,
+            _patch_composite_primary_keys=_patch_composite_primary_keys.get(schema_name, {}),
+            _patch_override_attributes=_patch_override_attributes.get(schema_name, {})
         )
         output_file_path = os.path.join(
             args.destination,
