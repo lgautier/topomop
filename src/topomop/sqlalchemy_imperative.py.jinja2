@@ -55,7 +55,7 @@ tables = Tables(
             {%- if field.is_primarykey -%},
             primary_key=True
             {%- endif -%}
-            {%- if field.is_required -%},
+            {%- if not field.is_required -%},
             nullable=True
             {%- endif -%}
             {%- if field.cdm.userGuidance -%},
