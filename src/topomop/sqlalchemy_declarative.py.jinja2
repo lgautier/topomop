@@ -27,32 +27,38 @@ class Base(DeclarativeBase):
     metadata = metadata_obj
 
 # TODO: check that no table.name can be equal to "Base".
-{% for table in tables %}
-{%- if comment_origin -%}
+{%- for table in tables -%}
+{%- if comment_origin %}
 
-# From Table CSV row {{ table.row_i }}.{% endif %}
+
+# From Table CSV row {{ table.row_i }}.
+{%- endif %}
 class {{ table.name }}(Base):
     """Description:
     {{ table.cdm.tableDescription | escape_tripleq }}
-    {%- if table.cdm.userGuidance -%}
+    {%- if table.cdm.userGuidance %}
 
     User guidance:     
     {{ table.cdm.userGuidance | escape_tripleq }}{% endif %}
      """
 
     __tablename__ = {{ table.name.upper() | repr }}
-    {% if table._patch_composite_primary_keys is not none %}
-        {%- if table._patch_composite_primary_keys | length == 0 -%}
+    {%- if table._patch_composite_primary_keys is not none -%}
+        {%- if table._patch_composite_primary_keys | length == 0 %}
+
     {{ table.name.upper() }}_ID = mapped_column(
         Integer, primary_key=True, autoincrement=True
     )
-	{%- else -%}
+        {%- else %}
+
     __mapper_args__ = {
         'primary_key': {{ table._patch_composite_primary_keys | repr }}
     }{%- endif -%}
-    {% endif %}
+    {%- endif -%}
     {% for field in table.fields %}
-    {%- if comment_origin %}# From Field CSV row {{ field.row_i }}.{% endif %}
+
+    {% if comment_origin -%}
+    # From Field CSV row {{ field.row_i }}.{% endif %}
     {{ field.name.upper() }} = mapped_column(
         {{ field.alchemytype }}
         {%- if field.foreignkey(schema_name, name2schema) -%},
@@ -60,11 +66,10 @@ class {{ table.name }}(Base):
         {%- endif -%}
         {%- if field.is_primarykey -%},
         primary_key=True
-        {%- endif -%}
-        nullable={%- if field.is_required -%}False{%- else -%}True{%- endif -%}),
+        {%- endif -%},
+        nullable={%- if field.is_required -%}False{%- else -%}True{%- endif -%}
         {%- if field.cdm.userGuidance -%},
         comment="""{{ field.cdm.userGuidance | escape_tripleq }} """{% endif %}
     )
-    {% endfor %}
-
+    {%- endfor -%}
 {% endfor %}

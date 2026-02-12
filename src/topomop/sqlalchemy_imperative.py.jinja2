@@ -54,9 +54,8 @@ tables = Tables(
             {%- endif -%}
             {%- if field.is_primarykey -%},
             primary_key=True
-            {%- endif -%}
-            nullable={%- if field.is_required -%}False{%- else -%}True{%- endif -%}),
-            {%- endif -%}
+            {%- endif -%},
+            nullable={%- if field.is_required -%}False{%- else -%}True{%- endif -%}
             {%- if field.cdm.userGuidance -%},
             comment="""{{ field.cdm.userGuidance | escape_tripleq }} """{%  endif %}
         ),
