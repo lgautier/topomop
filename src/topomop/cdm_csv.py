@@ -63,7 +63,7 @@ type _TYPE_PATCH_OVERRIDE_ATTRIBUTES = dict[
 ]
 
 
-def _bool(obj: str|bool):
+def _bool(obj: str|bool) -> bool:
     if isinstance(obj, bool):
         res = obj
     elif obj == 'Yes':

@@ -40,7 +40,7 @@ class Field(FieldAbstract):
 class Table(TableAbstract):
     cdmTableName: str
     schema: Schema = attrs.field(converter=Schema)
-    isRequired: bool | None = attrs.field(converter=_str_optional)
+    isRequired: bool = attrs.field(converter=_bool)
     conceptPrefix: str | None = attrs.field(converter=_str_optional)
     measurePersonCompleteness: bool = attrs.field(converter=_bool)
     measurePersonCompletenessThreshold: str | None = attrs.field(converter=_str_optional)

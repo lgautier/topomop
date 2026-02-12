@@ -27,7 +27,7 @@ class Field(FieldAbstract):
     cdmDatatype: str = attrs.field(converter=_cdmdatatype)
     userGuidance: str | None = attrs.field(converter=_str_optional)
     etlConventions: str | None = attrs.field(converter=_str_optional)
-    isPrimaryKey: str | None = attrs.field(converter=_bool)
+    isPrimaryKey: bool = attrs.field(converter=_bool)
     isForeignKey: bool = attrs.field(converter=_bool)
     fkTableName: str | None = attrs.field(converter=_str_optional)
     fkFieldName: str | None = attrs.field(converter=_str_optional)
