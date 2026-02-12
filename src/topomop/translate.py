@@ -131,20 +131,15 @@ def render_sqlalchemy(
         ],
         comment_origin: bool = True,
         style: str = "imperative",
-        _patch_composite_primary_keys: dict[str, # table name.
-                                            tuple[str, ...]] = {},
-        _patch_override_attributes: dict[str, # table name.
-                                         dict[str, # field name.
-                                              tuple[str,  # CDM attribute name.
-                                                    object]
-                                              ]
-                                         ] = {}
+        _patch_composite_primary_keys_schema: cdm_csv._TYPE_PATCH_COMPOSITE_PRIMARY_KEY = {},
+        _patch_override_attributes_schema: cdm_csv._TYPE_PATCH_OVERRIDE_ATTRIBUTES = {}
 ):
     tables_prepared = []
     for tbl, fields in tables.values():
         fields_prepared = []
-        _patch_attrs = _patch_override_attributes.get(tbl.data.name.upper())
-        _patch_prim_keys = _patch_composite_primary_keys.get(tbl.data.cdmTableName.upper())
+        _patch_attrs: dict[str, tuple[tuple[str, object], ...]] | None = (_patch_override_attributes_schema
+                                                              .get(tbl.data.name.upper()))
+        _patch_prim_keys = _patch_composite_primary_keys_schema.get(tbl.data.cdmTableName.upper())
         if _patch_prim_keys:
             warnings.warn(
                 f'{tbl.data.name.upper()}: '
@@ -153,8 +148,8 @@ def render_sqlalchemy(
         for fld in fields:
             if _patch_prim_keys and (fld.data.name.upper() in _patch_prim_keys):
                 setattr(fld.data, 'isPrimaryKey', True)
-            if _patch_attrs and _patch_attrs.get(fld.data.name.upper()):
-                for key, value in _patch_attrs.get(fld.data.name.upper(), {}):
+            if _patch_attrs and (fld.data.name.upper() in _patch_attrs):
+                for key, value in _patch_attrs[fld.data.name.upper()]:
                     setattr(fld.data, key, value)
                     warnings.warn(
                         f'{tbl.data.name.upper()}.{fld.data.name.upper()}: '

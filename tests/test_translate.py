@@ -46,8 +46,12 @@ def test_translation_alchemy_importable(sqlalchemy_style, cdm_version, cdm_modul
             tables,
             style=sqlalchemy_style,
             comment_origin=True,
-            _patch_composite_primary_keys=_patch_composite_primary_keys.get(schema_name, {}),
-            _patch_override_attributes=_patch_override_attributes.get(schema_name, {})
+            _patch_composite_primary_keys_schema=_patch_composite_primary_keys.get(
+                schema_name, {}
+            ),
+            _patch_override_attributes_schema=_patch_override_attributes.get(
+                schema_name, {}
+            )
         )
         context = {}
         exec(source_code, context)
@@ -106,7 +110,11 @@ def test_translation_sql(sqlalchemy_style, cdm_version, cdm_modulename):
             tables,
             style=sqlalchemy_style,
             comment_origin=True,
-            _patch_composite_primary_keys=_patch_composite_primary_keys.get(schema_name, {}),
-            _patch_override_attributes=_patch_override_attributes.get(schema_name, {})
+            _patch_composite_primary_keys_schema=_patch_composite_primary_keys.get(
+                schema_name, {}
+            ),
+            _patch_override_attributes_schema=_patch_override_attributes.get(
+                schema_name, {}
+            )
         )
         exec(source_code, context)
