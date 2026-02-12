@@ -186,12 +186,12 @@ class TableAbstract(abc.ABC):
 
     
 def match_omop_csv(fn: str):
-        m = OMOP_FILENAME_PATTERN.match(fn)
-        if m is None:
-            warnings.warn(
-                f"{fn} is not named like an OMOP CDM's CSV file."
-            )
-        return m
+    m = OMOP_FILENAME_PATTERN.match(fn)
+    if m is None:
+        warnings.warn(
+            f"{fn} is not named like an OMOP CDM's CSV file."
+        )
+    return m
 
 
 def scan(path):
@@ -209,7 +209,10 @@ def scan(path):
     return res
 
 
-def _read_csv(path, cls, _patch_row={}):
+def _read_csv(path, cls, _patch_row=None):
+    if _patch_row is None:
+        _patch_row = {}
+
     with open(path, newline='') as fh:
         reader = csv.reader(fh)
         header = next(reader)
