@@ -133,7 +133,7 @@ def _cdmdatatype(obj: str):
     ):
         raise ValueError(
             'Data types must be equal to one of the elements in CDM_TYPE_NONPARAMETRIC '
-            'or match the pattern in CDM_TYPE_NONPARAMETRIC.'
+            'or match the pattern in CDM_VARCHAR_PATTERN.'
         )
     return obj
 
@@ -187,10 +187,6 @@ class TableAbstract(abc.ABC):
     
 def match_omop_csv(fn: str):
     m = OMOP_FILENAME_PATTERN.match(fn)
-    if m is None:
-        warnings.warn(
-            f"{fn} is not named like an OMOP CDM's CSV file."
-        )
     return m
 
 
@@ -273,7 +269,8 @@ def _read_csv(path, cls, _patch_row=None):
             except (TypeError, ValueError) as err:
                 err.add_note(f'Occurred on row index {row_i}.')
                 raise err
-    
+
+
 class Cdm:
     """Common Data Model (as described in the OMOP CSV files).
 

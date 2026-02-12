@@ -23,7 +23,7 @@ def build_parser():
     parser.add_argument(
         '-d', '--destination',
         help=textwrap.dedent(
-            """Destination for the converstion (a path where files
+            """Destination for the conversion (a path where files
             will be saved)."""
         )
     )
