@@ -131,8 +131,10 @@ def render_sqlalchemy(
         ],
         comment_origin: bool = True,
         style: str = "imperative",
-        _patch_composite_primary_keys_schema: cdm_csv._TYPE_PATCH_COMPOSITE_PRIMARY_KEY = None,
-        _patch_override_attributes_schema: cdm_csv._TYPE_PATCH_OVERRIDE_ATTRIBUTES = None
+        _patch_composite_primary_keys_schema: (
+            cdm_csv._TYPE_PATCH_COMPOSITE_PRIMARY_KEY | None) = None,
+        _patch_override_attributes_schema: (
+            cdm_csv._TYPE_PATCH_OVERRIDE_ATTRIBUTES | None) = None
 ):
     if _patch_composite_primary_keys_schema is None:
         _patch_composite_primary_keys_schema = {}
