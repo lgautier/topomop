@@ -6,7 +6,9 @@ from .cdm_csv import (
     CdmInfo,
     FieldAbstract,
     Schema,
-    TableAbstract
+    TableAbstract,
+    _TYPE_PATCH_OVERRIDE_ATTRIBUTES,
+    _TYPE_PATCH_COMPOSITE_PRIMARY_KEY
 )
 
 
@@ -65,7 +67,7 @@ _PATCH_ROW = {
     }
 }
 
-_PATCH_COMPOSITE_PRIMARY_KEYS = {
+_PATCH_COMPOSITE_PRIMARY_KEYS: dict[str, _TYPE_PATCH_COMPOSITE_PRIMARY_KEY] = {
     'VOCAB': {
         'CONCEPT_RELATIONSHIP': (
             'CONCEPT_ID_1', 'CONCEPT_ID_2', 'RELATIONSHIP_ID', 'VALID_START_DATE', 'VALID_END_DATE'
@@ -108,14 +110,18 @@ _PATCH_COMPOSITE_PRIMARY_KEYS = {
 }
 
 _PATCH_OVERRIDE_ATTRIBUTES = {
-    'CDM': {
-        'DEATH': {
-            'PERSON_ID': (('isPrimaryKey', True), )
+    'CDM': {  # schema.
+        'DEATH': {  # table name.
+            'PERSON_ID': (  # column/field name.
+                ('isPrimaryKey', True),  # (CDM attribute name, new value).
+            )
         }
     },
     'RESULTS': {
         'COHORT_DEFINITION': {
-            'COHORT_DEFINITION_ID': (('isPrimaryKey', True), )
+            'COHORT_DEFINITION_ID': (
+                ('isPrimaryKey', True),
+            )
         }
     }
 }

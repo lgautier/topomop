@@ -49,6 +49,20 @@ SUPPORTED_EXTENSIONS = {
     '_Oncology_Ex': 'cdm_Oncology_Ex'
 }
 
+type _TYPE_PATCH_COMPOSITE_PRIMARY_KEY = dict[
+    str,  # table name.
+    tuple[str, ...]
+]
+
+type _TYPE_PATCH_OVERRIDE_ATTRIBUTES = dict[
+    str,  # table name.
+    dict[
+        str,  # field name.
+        tuple[tuple[str,  object], ...]  # CDM attribute name, new value.
+    ]
+]
+
+
 def _bool(obj: str|bool):
     if isinstance(obj, bool):
         res = obj
@@ -328,9 +342,9 @@ class Cdm:
                             tuple[DataFromRow[FieldAbstract], ...]]]
         ],
         # _PATCH_COMPOSITE_PRIMARY_KEY
-        dict[dict, tuple[str, ...]],
+        dict[str, _TYPE_PATCH_COMPOSITE_PRIMARY_KEY],
         # _PATCH_OVERRIDE_ATTRIBUTES
-        dict[dict, dict[str, tuple[str, object]]],
+        dict[str, _TYPE_PATCH_OVERRIDE_ATTRIBUTES]
     ]:
         all_fields = list(DataFromRow(*_) for _ in enumerate(self.iter_fields()))
         all_fields.sort(key=lambda x: x.data.cdmTableName)
@@ -376,7 +390,7 @@ class Cdm:
             schemas[
                 name2schema[tablename]
             ][tablename] = tuple(table_tuple)
-            
+
         return (name2schema, schemas,
                 self.cdm_module._PATCH_COMPOSITE_PRIMARY_KEYS,
                 self.cdm_module._PATCH_OVERRIDE_ATTRIBUTES)

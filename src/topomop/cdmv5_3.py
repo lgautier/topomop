@@ -6,7 +6,9 @@ from topomop.cdm_csv import (
     CdmInfo,
     FieldAbstract,
     Schema,
-    TableAbstract
+    TableAbstract,
+    _TYPE_PATCH_COMPOSITE_PRIMARY_KEY,
+    _TYPE_PATCH_OVERRIDE_ATTRIBUTES
 )
 
 
@@ -60,7 +62,7 @@ _PATCH_ROW = {
     }
 }
 
-_PATCH_COMPOSITE_PRIMARY_KEYS = {
+_PATCH_COMPOSITE_PRIMARY_KEYS: dict[str, _TYPE_PATCH_COMPOSITE_PRIMARY_KEY] = {
     'VOCAB': {
         'CONCEPT_RELATIONSHIP': (
             'CONCEPT_ID_1', 'CONCEPT_ID_2', 'RELATIONSHIP_ID', 'VALID_START_DATE', 'VALID_END_DATE'
@@ -97,15 +99,21 @@ _PATCH_COMPOSITE_PRIMARY_KEYS = {
 _PATCH_OVERRIDE_ATTRIBUTES = {
     'VOCAB': {
         'COHORT_DEFINITION': {
-            'COHORT_DEFINITION_ID': (('isPrimaryKey', True), )
+            'COHORT_DEFINITION_ID': (
+                ('isPrimaryKey', True),
+            )
         },
         'ATTRIBUTE_DEFINITION': {
-            'ATTRIBUTE_DEFINITION_ID': (('isPrimaryKey', True), )
+            'ATTRIBUTE_DEFINITION_ID': (
+                ('isPrimaryKey', True),
+            )
         }
     },
     'CDM': {
         'DEATH': {
-            'PERSON_ID': (('isPrimaryKey', True), )
+            'PERSON_ID': (
+                ('isPrimaryKey', True),
+            )
         }
     }
 
