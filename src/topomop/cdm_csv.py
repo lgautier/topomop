@@ -25,13 +25,13 @@ import collections
 import csv
 import enum
 import importlib
+import io
 import itertools
 import os
 import re
 import typing
 import types
 import warnings
-import io
 
 # Filenames 
 OMOP_FILENAME_PATTERN = re.compile(
