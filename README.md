@@ -10,6 +10,10 @@ a popular language in data engineering circles, and its rich ecosystem
 of packages for it, to implement data pipelines aiming at using
 OMOP.
 
+Initially, this package extract the OMOP CDM definitions from CSV files
+distributed with the R package `CommonDataModel` into an intermediate
+abstraction that can be used to translate OMOP into SQLAlchemy,
+an Object-Relational Mapping (ORM) for Python.
 
 ## Installation
 
