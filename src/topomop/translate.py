@@ -162,7 +162,7 @@ def render_sqlalchemy(
                 if not getattr(fld.data, 'isRequired'):
                     # Primary key implies not nullable.
                     setattr(fld.data, 'isRequired', True)
-                    msg.append(f'In consequence, also setting isRequired to True.')
+                    msg.append('In consequence, also setting isRequired to True.')
                 warnings.warn(' '.join(msg))
 
             if _patch_attrs and (fld.data.name.upper() in _patch_attrs):
