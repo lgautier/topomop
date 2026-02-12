@@ -39,7 +39,7 @@ def build_parser():
         choices=('declarative', 'imperative'),
         default='imperative',
         help=textwrap.dedent(
-            """SQLAlchemy style for class mapping (default: %default)."""
+            """SQLAlchemy style for class mapping (default: %(default)s)."""
         )
     )
     parser.add_argument(

@@ -116,7 +116,7 @@ def escape_tripleq(obj: str):
     return obj.replace('"""', r'\"""')
 
 
-_STYLE_TEMPLATE =  {
+_STYLE_TEMPLATE = {
     'declarative': 'sqlalchemy_declarative.py.jinja2',
     'imperative': 'sqlalchemy_imperative.py.jinja2'
 }
@@ -131,9 +131,14 @@ def render_sqlalchemy(
         ],
         comment_origin: bool = True,
         style: str = "imperative",
-        _patch_composite_primary_keys_schema: cdm_csv._TYPE_PATCH_COMPOSITE_PRIMARY_KEY = {},
-        _patch_override_attributes_schema: cdm_csv._TYPE_PATCH_OVERRIDE_ATTRIBUTES = {}
+        _patch_composite_primary_keys_schema: cdm_csv._TYPE_PATCH_COMPOSITE_PRIMARY_KEY = None,
+        _patch_override_attributes_schema: cdm_csv._TYPE_PATCH_OVERRIDE_ATTRIBUTES = None
 ):
+    if _patch_composite_primary_keys_schema is None:
+        _patch_composite_primary_keys_schema = {}
+    if _patch_override_attributes_schema is None:
+        _patch_override_attributes_schema = {}
+
     tables_prepared = []
     for tbl, fields in tables.values():
         fields_prepared = []

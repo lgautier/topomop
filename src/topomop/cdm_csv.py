@@ -29,8 +29,8 @@ import io
 import itertools
 import os
 import re
-import typing
 import types
+import typing
 import warnings
 
 # Filenames 
@@ -261,7 +261,7 @@ def _read_csv(path, cls, _patch_row=None):
                 row = next(singlerow_reader)
 
                 warnings.warn(
-                    f'{row_i} was patched to address and issue ({issue}).'
+                    f'{row_i} was patched to address an issue ({issue}).'
                 )
 
             try:
