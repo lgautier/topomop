@@ -47,7 +47,7 @@ class {{ table.name }}(Base):
         {%- if table._patch_composite_primary_keys | length == 0 %}
 
     {{ table.name.upper() }}_ID = mapped_column(
-        Integer, primary_key=True, autoincrement=True
+        BigInteger, primary_key=True, autoincrement=True
     )
         {%- else %}
 

@@ -35,7 +35,7 @@ tables = Tables(
             {%- if table._patch_composite_primary_keys | length == 0 -%}
         Column(
             '{{ table.name.upper() }}_ID',
-            Integer, primary_key=True, autoincrement=True,
+            BigInteger, primary_key=True, autoincrement=True,
             comment="""TODO: add reference to issue."""
         ),
             {%- else -%}
