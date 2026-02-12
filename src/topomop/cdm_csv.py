@@ -262,7 +262,7 @@ def _read_csv(path, cls, _patch_row={}):
                 row = next(singlerow_reader)
 
                 warnings.warn(
-                    f'{row_i} was patched to address and issue (see {issue}).'
+                    f'{row_i} was patched to address and issue ({issue}).'
                 )
 
             try:

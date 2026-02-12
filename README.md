@@ -40,7 +40,7 @@ topomop-convert \
 
 ```sh
 topomop-convert \
-  -s $(Rscript -e "cat(system.file(\"csv\", package = \"CommonDataModel\"))"
+  -s $(Rscript -e "cat(system.file(\"csv\", package = \"CommonDataModel\"))")
   path/to/sourcetree/CommonDataModel/inst/csv/ \
   -d path/to/python/conversion.py \
   v5.4
