@@ -107,7 +107,7 @@ _PATCH_COMPOSITE_PRIMARY_KEYS: dict[str, _TYPE_PATCH_COMPOSITE_PRIMARY_KEY] = {
     }
 }
 
-_PATCH_OVERRIDE_ATTRIBUTES = {
+_PATCH_OVERRIDE_ATTRIBUTES: dict[str, _TYPE_PATCH_OVERRIDE_ATTRIBUTES] = {
     'VOCAB': {  # schema.
          'COHORT_DEFINITION': {  # table name.
              'COHORT_DEFINITION_ID': (  # column/field name.

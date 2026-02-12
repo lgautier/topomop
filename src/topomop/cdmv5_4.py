@@ -109,7 +109,7 @@ _PATCH_COMPOSITE_PRIMARY_KEYS: dict[str, _TYPE_PATCH_COMPOSITE_PRIMARY_KEY] = {
     }
 }
 
-_PATCH_OVERRIDE_ATTRIBUTES = {
+_PATCH_OVERRIDE_ATTRIBUTES: dict[str, _TYPE_PATCH_OVERRIDE_ATTRIBUTES] = {
     'CDM': {  # schema.
         'DEATH': {  # table name.
             'PERSON_ID': (  # column/field name.
