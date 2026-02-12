@@ -153,12 +153,18 @@ def render_sqlalchemy(
         for fld in fields:
             if _patch_prim_keys and (fld.data.name.upper() in _patch_prim_keys):
                 setattr(fld.data, 'isPrimaryKey', True)
+                warnings.warn(
+                    f'{tbl.data.name.upper()}.{fld.data.name.upper()}: '
+                    'setting isPrimaryKey to True,'
+                )
+
             if _patch_attrs and (fld.data.name.upper() in _patch_attrs):
                 for key, value in _patch_attrs[fld.data.name.upper()]:
+                    orig_value = getattr(fld.data, key)
                     setattr(fld.data, key, value)
                     warnings.warn(
                         f'{tbl.data.name.upper()}.{fld.data.name.upper()}: '
-                        f'field {key} in OMOP CDM changed from {repr(getattr(fld.data, key))} to {repr(value)}'
+                        f'field {key} in OMOP CDM changed from {repr(orig_value)} to {repr(value)}.'
                     )
             fields_prepared.append(
                 FieldAlchemyAdapter(fld)
