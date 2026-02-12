@@ -58,7 +58,10 @@ type _TYPE_PATCH_OVERRIDE_ATTRIBUTES = dict[
     str,  # table name.
     dict[
         str,  # field name.
-        tuple[tuple[str,  object], ...]  # CDM attribute name, new value.
+        tuple[
+            tuple[tuple[str,  object], ...],  # CDM attribute name, new value.
+            str  # comments.
+        ]
     ]
 ]
 

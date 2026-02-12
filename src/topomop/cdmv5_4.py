@@ -112,14 +112,19 @@ _PATCH_OVERRIDE_ATTRIBUTES: dict[str, _TYPE_PATCH_OVERRIDE_ATTRIBUTES] = {
     'CDM': {  # schema.
         'DEATH': {  # table name.
             'PERSON_ID': (  # column/field name.
-                ('isPrimaryKey', True),  # (CDM attribute name, new value).
+                (
+                    ('isPrimaryKey', True),  # (CDM attribute name, new value).
+                ),
+                'See https://github.com/OHDSI/CommonDataModel/issues/770'
             )
         }
     },
     'RESULTS': {
         'COHORT_DEFINITION': {
             'COHORT_DEFINITION_ID': (
-                ('isPrimaryKey', True),
+                (
+                    ('isPrimaryKey', True),
+                ), 'See https://github.com/OHDSI/CommonDataModel/issues/772'
             )
         }
     }

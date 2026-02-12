@@ -100,19 +100,27 @@ _PATCH_OVERRIDE_ATTRIBUTES: dict[str, _TYPE_PATCH_OVERRIDE_ATTRIBUTES] = {
     'VOCAB': {
         'COHORT_DEFINITION': {
             'COHORT_DEFINITION_ID': (
-                ('isPrimaryKey', True),
+                (
+                    ('isPrimaryKey', True),
+                ),
+                'See https://github.com/OHDSI/CommonDataModel/issues/772'
             )
         },
         'ATTRIBUTE_DEFINITION': {
             'ATTRIBUTE_DEFINITION_ID': (
-                ('isPrimaryKey', True),
+                (
+                    ('isPrimaryKey', True),
+                ),
+                ''
             )
         }
     },
     'CDM': {
         'DEATH': {
             'PERSON_ID': (
-                ('isPrimaryKey', True),
+                (
+                    ('isPrimaryKey', True),
+                ), 'See https://github.com/OHDSI/CommonDataModel/issues/770'
             )
         }
     }
