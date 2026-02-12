@@ -94,7 +94,6 @@ _PATCH_COMPOSITE_PRIMARY_KEYS: dict[str, _TYPE_PATCH_COMPOSITE_PRIMARY_KEY] = {
         'EPISODE_EVENT': (
             'EPISODE_ID', 'EVENT_ID', 'EPISODE_EVENT_FIELD_CONCEPT_ID'
         ),
-        'METADATA': tuple(),
         'CDM_SOURCE': (
             'CDM_SOURCE_NAME',
             'CDM_SOURCE_ABBREVIATION',

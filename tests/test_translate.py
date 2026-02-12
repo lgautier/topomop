@@ -28,11 +28,6 @@ if not (
     topomop.cdm_csv.SUPPORTED_VERSIONS.items()
 )
 def test_translation_alchemy_importable(sqlalchemy_style, cdm_version, cdm_modulename):
-    if cdm_modulename == 'cdmv5_4':
-            pytest.xfail(
-                'Field definition in CDM v5.4 has an invalid row index 353. '
-                'See https://github.com/OHDSI/CommonDataModel/pull/766.'
-            )
 
     cdm = topomop.cdm_csv.Cdm(OMOP_CDM_CSV_DIR, f'topomop.{cdm_modulename}')
     (name2schema, schema_defs,
@@ -66,12 +61,6 @@ def test_translation_alchemy_importable(sqlalchemy_style, cdm_version, cdm_modul
     topomop.cdm_csv.SUPPORTED_VERSIONS.items()
 )
 def test_translation_sql(sqlalchemy_style, cdm_version, cdm_modulename):
-    if cdm_modulename == 'cdmv5_4':
-            pytest.xfail(
-                'Field definition in CDM v5.4 has an invalid row index 353. '
-                'See https://github.com/OHDSI/CommonDataModel/pull/766.'
-            )
-
     cdm = topomop.cdm_csv.Cdm(OMOP_CDM_CSV_DIR, f'topomop.{cdm_modulename}')
     (name2schema, schema_defs,
      _patch_composite_primary_keys, _patch_override_attributes) = cdm.schemas()

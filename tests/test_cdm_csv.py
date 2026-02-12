@@ -36,11 +36,6 @@ class TestCdm:
         cdm = topomop.cdm_csv.Cdm(OMOP_CDM_CSV_DIR, f'topomop.{cdm_modulename}')
 
     def test_iter_by_schema(self, cdm_modulename):
-        if cdm_modulename == 'cdmv5_4':
-            pytest.xfail(
-                'Field definition in CDM v5.4 has an invalid row index 353. '
-                'See https://github.com/OHDSI/CommonDataModel/pull/766.'
-            )
 
         cdm = topomop.cdm_csv.Cdm(OMOP_CDM_CSV_DIR, f'topomop.{cdm_modulename}')
         tuple(cdm.schemas())
