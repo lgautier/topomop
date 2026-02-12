@@ -157,6 +157,8 @@ def render_sqlalchemy(
         for fld in fields:
             if _patch_prim_keys and (fld.data.name.upper() in _patch_prim_keys):
                 setattr(fld.data, 'isPrimaryKey', True)
+                # Primary key implies not nullable.
+                setattr(fld.data, 'isRequired', True)
                 warnings.warn(
                     f'{tbl.data.name.upper()}.{fld.data.name.upper()}: '
                     'setting isPrimaryKey to True,'
