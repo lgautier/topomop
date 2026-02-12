@@ -144,8 +144,10 @@ def render_sqlalchemy(
     tables_prepared = []
     for tbl, fields in tables.values():
         fields_prepared = []
-        _patch_attrs: dict[str, tuple[tuple[str, object], ...]] | None = (_patch_override_attributes_schema
-                                                              .get(tbl.data.name.upper()))
+        _patch_attrs: dict[str, tuple[tuple[str, object], ...]] | None = (
+            _patch_override_attributes_schema
+            .get(tbl.data.name.upper())
+        )
         _patch_prim_keys = _patch_composite_primary_keys_schema.get(tbl.data.cdmTableName.upper())
         if _patch_prim_keys:
             warnings.warn(
