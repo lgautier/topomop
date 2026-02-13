@@ -603,7 +603,7 @@ class drug_strength(Base):
     __tablename__ = 'DRUG_STRENGTH'
 
     DRUG_STRENGTH_ID = mapped_column(
-        Integer, primary_key=True, autoincrement=True
+        BigInteger, primary_key=True, autoincrement=True
     )
 
     # From Field CSV row 372.

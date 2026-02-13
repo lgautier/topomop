@@ -913,6 +913,7 @@ class procedure_occurrence(Base):
     # From Field CSV row 107.
     PROVIDER_ID = mapped_column(
         BigInteger,
+        ForeignKey('PROVIDER.PROVIDER_ID'),
         nullable=True,
         comment="""The provider associated with the procedure record, e.g. the provider who performed the Procedure. """
     )
@@ -920,6 +921,7 @@ class procedure_occurrence(Base):
     # From Field CSV row 108.
     VISIT_OCCURRENCE_ID = mapped_column(
         BigInteger,
+        ForeignKey('VISIT_OCCURRENCE.VISIT_OCCURRENCE_ID'),
         nullable=True,
         comment="""The visit during which the procedure occurred. """
     )
@@ -927,6 +929,7 @@ class procedure_occurrence(Base):
     # From Field CSV row 109.
     VISIT_DETAIL_ID = mapped_column(
         BigInteger,
+        ForeignKey('VISIT_DETAIL.VISIT_DETAIL_ID'),
         nullable=True,
         comment="""The VISIT_DETAIL record during which the Procedure occurred. For example, if the Person was in the ICU at the time of the Procedure the VISIT_OCCURRENCE record would reflect the overall hospital stay and the VISIT_DETAIL record would reflect the ICU stay during the hospital visit. """
     )
@@ -941,6 +944,7 @@ class procedure_occurrence(Base):
     # From Field CSV row 111.
     PROCEDURE_SOURCE_CONCEPT_ID = mapped_column(
         Integer,
+        ForeignKey('VOCAB.CONCEPT.CONCEPT_ID'),
         nullable=False,
         comment="""This is the concept representing the procedure source value and may not necessarily be standard. This field is discouraged from use in analysis because it is not required to contain Standard Concepts that are used across the OHDSI community, and should only be used when Standard Concepts do not adequately represent the source detail for the Procedure necessary for a given analytic use case. Consider using PROCEDURE_CONCEPT_ID instead to enable standardized analytics that can be consistent across the network. """
     )
@@ -2070,7 +2074,7 @@ class location_history(Base):
     __tablename__ = 'LOCATION_HISTORY'
 
     LOCATION_HISTORY_ID = mapped_column(
-        Integer, primary_key=True, autoincrement=True
+        BigInteger, primary_key=True, autoincrement=True
     )
 
     # From Field CSV row 260.
@@ -2779,7 +2783,7 @@ class metadata(Base):
     __tablename__ = 'METADATA'
 
     METADATA_ID = mapped_column(
-        Integer, primary_key=True, autoincrement=True
+        BigInteger, primary_key=True, autoincrement=True
     )
 
     # From Field CSV row 344.
