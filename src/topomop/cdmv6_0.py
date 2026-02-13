@@ -120,5 +120,34 @@ _PATCH_OVERRIDE_ATTRIBUTES: dict[str, _TYPE_PATCH_OVERRIDE_ATTRIBUTES] = {
                  'See https://github.com/OHDSI/CommonDataModel/issues/772'
              )
          },
+    },
+    'CDM': {
+        'PROCEDURE_OCCURRENCE': {
+            'PROVIDER_ID': (
+                (
+                    ('isForeignKey', True),  # fkTableName and fkFieldName are already set.
+                ),
+                'See https://github.com/OHDSI/CommonDataModel/issues/774'
+            ),
+            'VISIT_OCCURRENCE_ID': (
+                (
+                    ('isForeignKey', True),  # fkTableName and fkFieldName are already set.
+                ),
+                'See https://github.com/OHDSI/CommonDataModel/issues/776'
+            ),
+            'VISIT_DETAIL_ID': (
+                (
+                    ('isForeignKey', True),  # fkTableName and fkFieldName are already set.
+                ),
+                'See https://github.com/OHDSI/CommonDataModel/issues/777'
+            ),
+            'PROCEDURE_SOURCE_CONCEPT_ID': (
+                (
+                    ('isForeignKey', True),
+                    
+                ),
+                'See https://github.com/OHDSI/CommonDataModel/issues/778'
+            )
+        }
     }
 }
