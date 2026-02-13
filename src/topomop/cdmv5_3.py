@@ -122,6 +122,13 @@ _PATCH_OVERRIDE_ATTRIBUTES: dict[str, _TYPE_PATCH_OVERRIDE_ATTRIBUTES] = {
                     ('isPrimaryKey', True),
                 ), 'See https://github.com/OHDSI/CommonDataModel/issues/770'
             )
+        },
+        'PROCEDURE_OCCURRENCE': {
+            'PROVIDER_ID': (
+                (
+                    ('isForeignKey', True),  # fkTableName and fkFieldName are already set.
+                ),
+                'See https://github.com/OHDSI/CommonDataModel/issues/774'
         }
     }
 }
