@@ -140,6 +140,13 @@ _PATCH_OVERRIDE_ATTRIBUTES: dict[str, _TYPE_PATCH_OVERRIDE_ATTRIBUTES] = {
                     ('isForeignKey', True),  # fkTableName and fkFieldName are already set.
                 ),
                 'See https://github.com/OHDSI/CommonDataModel/issues/777'
+            ),
+            'PROCEDURE_SOURCE_CONCEPT_ID': (
+                (
+                    ('isForeignKey', True),
+                    
+                ),
+                'See https://github.com/OHDSI/CommonDataModel/issues/778'
             )
         }
     }
