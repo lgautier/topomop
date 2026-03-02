@@ -13,7 +13,8 @@ OMOP.
 Initially, this package extract the OMOP CDM definitions from CSV files
 distributed with the R package `CommonDataModel` into an intermediate
 abstraction that can be used to translate OMOP into SQLAlchemy,
-an Object-Relational Mapping (ORM) for Python.
+an Object-Relational Mapping (ORM) for Python. Example of this are
+currently here: [doc/render](doc/render)
 
 ## Installation
 
