@@ -1,4 +1,6 @@
-# Data (engineering) tooling for the OMOP Common Data Model
+# Data (engineering) tooling for the OMOP CDM
+
+[![Python package](https://github.com/lgautier/topomop/actions/workflows/package.yml/badge.svg)](https://github.com/lgautier/topomop/actions/workflows/package.yml)
 
 ## Why this?
 
